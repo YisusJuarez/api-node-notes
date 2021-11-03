@@ -47,6 +47,7 @@ app.post('/api/notes',(request, response)=>{
   }
 
   notes.concat(newNote)
+  console.log(newNote)
   
 })
 

@@ -1,7 +1,8 @@
 const express = require("express");
+const cors = require('cors')
 const notes = require("./data");
 const logger = require("./loggerMiddleware");
-const cors = require('cors')
+
 
 const app = express();
 
@@ -35,7 +36,7 @@ app.delete("/api/notes/:id", (request, response) => {
 });
 
 
-app.post('/api/notes',(request, response)=>{
+app.post('/api/notes',cors(),(request, response)=>{
   const data = request.body  
   /*const newNote = {
     userId:1,

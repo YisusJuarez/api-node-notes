@@ -35,6 +35,21 @@ app.delete("/api/notes/:id", (request, response) => {
 });
 
 
+app.post('/api/notes',(request, response)=>{
+  const data = request.body
+  const lastId = notes.lastIndexOf()
+  
+  const newNote = {
+    userId:1,
+    id:notes[lastId].id,
+    title:data.title,
+    body: data.body
+  }
+
+  notes.concat(newNote)
+  
+})
+
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {

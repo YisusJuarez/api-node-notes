@@ -6,7 +6,6 @@ const cors = require('cors')
 const app = express();
 
 app.use(cors())
-app.use(express.json)
 app.use(logger);
 
 app.get("/", (request, response) => {
@@ -15,7 +14,6 @@ app.get("/", (request, response) => {
 
 app.get("/api/notes", (request, response, next) => {
   response.json(notes);
-  next();
 });
 
 app.get("/api/notes/:id", (request, response) => {
@@ -36,12 +34,9 @@ app.delete("/api/notes/:id", (request, response) => {
   response.status(204).end();
 });
 
-app.use(() => {
-  console.log("He entrado aqui");
-});
 
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
-  console.log("Server Running");
+  console.log("Server Running", PORT);
 });

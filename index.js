@@ -37,15 +37,15 @@ app.delete("/api/notes/:id", (request, response) => {
 
 app.post('/api/notes',(request, response)=>{
   const data = request.body  
-  const newNote = {
+  /*const newNote = {
     userId:1,
     id:data.id,
     title:data.title,
     body: data.body
   }
 
-  notes.concat(newNote)
-  console.log(newNote)
+  notes.concat(newNote)*/
+  console.log(data)
   
 })
 

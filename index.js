@@ -36,12 +36,10 @@ app.delete("/api/notes/:id", (request, response) => {
 
 
 app.post('/api/notes',(request, response)=>{
-  const data = request.body
-  const lastId = notes.lastIndexOf()
-  
+  const data = request.body  
   const newNote = {
     userId:1,
-    id:notes[lastId].id,
+    id:data.id,
     title:data.title,
     body: data.body
   }

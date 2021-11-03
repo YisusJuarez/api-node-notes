@@ -7,6 +7,7 @@ const logger = require("./loggerMiddleware");
 const app = express();
 
 app.use(cors())
+app.use(express.json())
 app.use(logger);
 
 app.get("/", (request, response) => {
@@ -36,18 +37,17 @@ app.delete("/api/notes/:id", (request, response) => {
 });
 
 
-app.post('/api/notes',cors(),(request, response)=>{
-  const data = request.body  
-  /*const newNote = {
+app.post('/api/notes',(request, response)=>{
+  const data = request.body
+  const newNote = {
     userId:1,
     id:data.id,
     title:data.title,
     body: data.body
   }
 
-  notes.concat(newNote)*/
-  console.log("data:", data)
-  
+  notes.push(newNote)
+  response.status(200).end()
 })
 
 

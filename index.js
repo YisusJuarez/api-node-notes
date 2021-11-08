@@ -1,57 +1,87 @@
+require("dotenv").config();
 const express = require("express");
-const cors = require('cors')
-const notes = require("./data");
+const cors = require("cors");
 const logger = require("./loggerMiddleware");
-
-
 const app = express();
 
-app.use(cors())
-app.use(express.json())
+/* BD Mongo*/
+require("./mongo.js");
+const Note = require("./models/Note");
+const { connection } = require("mongoose");
+
+app.use(cors());
+app.use(express.json());
 app.use(logger);
 
 app.get("/", (request, response) => {
-  response.send("Hi bro");
+  response.send("<h1>Hello Yisus</h1>");
 });
 
 app.get("/api/notes", (request, response, next) => {
-  response.json(notes);
+  Note.find({})
+    .then((res) => {
+      console.log(res);
+      response.json(res);
+    })
+    .catch((err) => console.log(err));
 });
 
-app.get("/api/notes/:id", (request, response) => {
-  const id = Number(request.params.id);
-
-  const note = notes.find((n) => n.id === id);
-
-  if (note) {
-    response.json(note);
-  } else {
-    response.status(404).end();
-  }
+app.get("/api/notes/:id", (request, response, next) => {
+  const { id } = request.params;
+  console.log(id);
+  Note.findById(id)
+    .then((nota) => {
+      if (nota) {
+        response.json(nota);
+      } else {
+        response.status(404).end();
+      }
+    })
+    .catch((err) => {
+      next(err);
+    });
 });
 
-app.delete("/api/notes/:id", (request, response) => {
-  const id = Number(request.params.id);
-  notes = notes.filter((e) => e.id !== id);
-  response.status(204).end();
+app.delete("/api/notes/:id", (request, response, next) => {
+  const {id} = request.params;
+  Note.findByIdAndDelete({ id }).then((nota) => {
+    if (nota) {
+      response.json(nota);
+    } else {
+      response.status(404).end();
+    }
+  }).catch(err => next(err))
 });
 
-
-app.post('/api/notes',(request, response)=>{
-  const data = request.body
+app.post("/api/notes", (request, response) => {
+  const data = request.body;
   const newNote = {
-    userId:1,
-    id:data.id,
-    title:data.title,
-    body: data.body
+    userId: 1,
+    title: data.title,
+    body: data.body,
+  };
+  const note = new Note(newNote);
+
+  note
+    .save()
+    .then((savedNote) => {
+      response.json(savedNote);
+    })
+    .catch((err) => console.log(err));
+  connection.close();
+});
+
+app.use((error, request, response, next) => {
+  console.log(error);
+  console.log(error.name);
+  if (error.name == "CastError") {
+    response.status(400).send({error:"Id no encontrado"});
+  } else {
+    reponse.status(500).send({error:"Ocurrio un error"});
   }
+});
 
-  notes.push(newNote)
-  response.status(200).end()
-})
-
-
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log("Server Running", PORT);
 });

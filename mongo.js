@@ -1,8 +1,8 @@
+/*Mongo db config*/
 const mongoose = require("mongoose");
 const connectionString = process.env.MONGO_DB_URI;
 
 //conexión a mongo db
-
 mongoose
   .connect(connectionString)
   .then(() => {

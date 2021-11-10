@@ -6,6 +6,8 @@ const noteSchema = new Schema({
   body: String,
 });
 
+
+//El nombre de la colección preferencia en singular
 const Note = model("Note", noteSchema);
 
 noteSchema.set('toJSON',{
@@ -15,9 +17,5 @@ noteSchema.set('toJSON',{
         delete returnedObject.__v
     }
 })
-/*Note.find({}).then((res) => {
-  console.log(res);
-  mongoose.connection.close();
-});*/
 
 module.exports = Note;

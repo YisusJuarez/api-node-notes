@@ -2,6 +2,8 @@ POST http://localhost:3001/api/notes/
 Content-Type: application/json
 
 {
-  "title": "HelloWorld",
-  "body": "This is the content of my new note"
+  "title": "Hola usando Mongo y Usuarios",
+  "body": "This is the content of my new note",
+  "userId":"6196cc4f422c7366c8ea0da3"
+
 }

@@ -1,7 +1,6 @@
 const { Schema, model } = require("mongoose");
 
 const noteSchema = new Schema({
-  userId: Number,
   title: String,
   body: String,
   user:{

@@ -5,6 +5,7 @@ const logger = require("./middlewares/loggerMiddleware");
 const middlewareNotFound = require("./middlewares/notFoundMiddleware");
 const usersRouter = require("./controllers/usersController");
 const notesRouter = require("./controllers/notesController");
+const loginRouter = require('./controllers/loginController')
 const app = express();
 
 /* BD Mongo*/
@@ -37,6 +38,9 @@ app.use("/api/notes",notesRouter)
 
 // Users Create user
 app.use('/api/users', usersRouter)
+
+// login
+app.use('/api/login', loginRouter)
 
 /* Next Error handler*/
 app.use((error, request, response, next) => {

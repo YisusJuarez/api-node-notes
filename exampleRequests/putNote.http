@@ -2,6 +2,6 @@ PUT http://localhost:3001/api/notes/6189bc38a0587aa2a469e134
 Content-Type: application/json
 
 {
-  "title": "PUT Action desde api",
+  "title": "PUT Action desde api con JWT",
   "body": "This is the content of my new note with put"
 }

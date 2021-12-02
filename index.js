@@ -5,7 +5,8 @@ const logger = require("./middlewares/loggerMiddleware");
 const middlewareNotFound = require("./middlewares/notFoundMiddleware");
 const usersRouter = require("./controllers/usersController");
 const notesRouter = require("./controllers/notesController");
-const loginRouter = require('./controllers/loginController')
+const loginRouter = require('./controllers/loginController');
+
 const app = express();
 
 /* BD Mongo*/
@@ -21,20 +22,8 @@ app.get("/", (request, response) => {
   response.send("<h1>Hello,this is an Api example</h1>");
 });
 
-/* Get all notes */
+/* notes */
 app.use("/api/notes",notesRouter);
-
-/* Get note by id */
-app.use("/api/notes", notesRouter);
-
-/* Delete note by id */
-app.use("/api/notes", notesRouter);
-
-/* Post create a note*/
-app.use("/api/notes", notesRouter);
-
-/*Put for editing note by id */
-app.use("/api/notes",notesRouter)
 
 // Users Create user
 app.use('/api/users', usersRouter)
@@ -46,9 +35,12 @@ app.use('/api/login', loginRouter)
 app.use((error, request, response, next) => {
   console.log(error);
   console.log(error.name);
-  if (error.name == "CastError") {
+  if (error.name === "CastError") {
     response.status(400).send({error:"Id no encontrado"});
-  } else {
+  }else if(error.name === "JsonWebTokenError") {
+    response.status(401).json({error:"JWT invalido"})
+  }
+  else {
     response.status(500).send({error:"Ocurrio un error"});
   }
 });

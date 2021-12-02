@@ -1,6 +1,8 @@
 const notesRouter = require("express").Router();
 const Note = require("../models/NoteModel");
 const User = require('../models/UserModel');
+const userExtractor = require('../middlewares/userExtractor')
+const jwt = require('jsonwebtoken')
 /* Get all notes */
 notesRouter.get("/", async (request, response, next) => {
   try {
@@ -11,8 +13,10 @@ notesRouter.get("/", async (request, response, next) => {
   }
 });
 /* Post a new note */
-notesRouter.post("/", async (request, response, next) => {
-  const {title, body, userId} =request.body
+notesRouter.post("/", userExtractor, async (request, response, next) => {
+  const {title, body} =request.body
+  const {userId} = request
+
   const user = await User.findById(userId)
   console.log(user)
   const newNote = {
@@ -31,13 +35,6 @@ notesRouter.post("/", async (request, response, next) => {
     response.json(user);
   })
   .catch(err => console.log(err))
-
-  /*note
-    .save()
-    .then((savedNote) => {
-      response.json(savedNote);
-    })
-    .catch((err) => console.log(err));*/
 });
 /* Get note by id */
 notesRouter.get("/:id", async (request, response, next) => {
@@ -56,7 +53,7 @@ notesRouter.get("/:id", async (request, response, next) => {
     });
 });
 /* Delete note by id */
-notesRouter.delete("/:id", async (request, response, next) => {
+notesRouter.delete("/:id", userExtractor, async (request, response, next) => {
   const { id } = request.params;
   Note.findByIdAndDelete(id)
     .then((nota) => {
@@ -69,7 +66,7 @@ notesRouter.delete("/:id", async (request, response, next) => {
     .catch((err) => next(err));
 });
 /*Put for editing note by id */
-notesRouter.put("/:id", (request, reponse, next) => {
+notesRouter.put("/:id", userExtractor,  (request, reponse, next) => {
     const {id} = request.params;
     const note = request.body;
     const newNoteInfo = {
@@ -77,7 +74,7 @@ notesRouter.put("/:id", (request, reponse, next) => {
       body: note.body,
     };
     
-    Note.findByIdAndUpdate(id, newNoteInfo, {new:true})
+     Note.findByIdAndUpdate(id, newNoteInfo, {new:true})
     .then((res) => {
       if (res) {
         reponse.json(res);
